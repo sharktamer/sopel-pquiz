@@ -37,11 +37,14 @@ def pquiz(bot, trigger):
         return
 
     if len(args) == 0:
-        pj = j.values()
+        pj = list(j.values())
+        bot.say('Starting pquiz with all mons')
     elif len(args) == 1:
         pj = [j[i] for i in j if int(i) <= args[0]]
+        bot.say('Starting pquiz with mons 1-{}'.format(args[0]))
     else:
         pj = [j[i] for i in j if int(i) >= args[0] and int(i) <= args[1]]
+        bot.say('Starting pquiz with mons {}-{}'.format(*args[:2]))
     bot.memory['pj'] = pj
     bot.memory['pj_size'] = len(pj)
     bot.memory['pq_active'] = True
