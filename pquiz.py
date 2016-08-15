@@ -10,9 +10,22 @@ with open(jsonfile) as f:
     j = json.load(f)
 
 
-@rule('.*')
+@rule('[^\.].*')
 def panswer(bot, trigger):
-    pass
+    if not bot.memory.contains('pq_active') or not bot.memory['pq_active']:
+        return
+
+    removed = False
+    for i in trigger.args[1].split():
+        if i.lower() in bot.memory['pj']:
+            removed = True
+            bot.memory['pj'].remove(i.lower())
+    if removed:
+        remaining = bot.memory['pj_size'] - len(bot.memory['pj'])
+        bot.say('pquiz: {}/{}'.format(remaining, bot.memory['pj_size']))
+        if not len(bot.memory['pj']):
+            bot.say('You named all the pokemon!')
+            bot.memory['pq_active'] = False
 
 
 @commands('pquiz')
@@ -24,10 +37,11 @@ def pquiz(bot, trigger):
         return
 
     if len(args) == 0:
-        pj = j
+        pj = j.values()
     elif len(args) == 1:
-        pj = {i: j[i] for i in j if int(i) <= args[0]}
+        pj = [j[i] for i in j if int(i) <= args[0]]
     else:
-        pj = {i: j[i] for i in j if int(i) >= args[0] and int(i) <= args[1]}
-
-
+        pj = [j[i] for i in j if int(i) >= args[0] and int(i) <= args[1]]
+    bot.memory['pj'] = pj
+    bot.memory['pj_size'] = len(pj)
+    bot.memory['pq_active'] = True
