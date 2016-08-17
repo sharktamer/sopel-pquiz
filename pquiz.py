@@ -26,7 +26,7 @@ def pquiz(bot, trigger):
         return
 
     j = bot.memory['pquiz']['list']
-    bot.memory['scores'] = {}
+    bot.memory['pquiz']['scores'] = {}
 
     if len(args) == 0:
         pj = list(j.values())
