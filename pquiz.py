@@ -62,6 +62,7 @@ def panswer(bot, trigger):
         if not len(bot.memory['pquiz']['game_list']):
             bot.say('You named all the pokemon!')
             bot.say('Scores:')
-            for i in bot.memory['pquiz']['scores']:
-                bot.say('{}: {}'.format(i, bot.memory['pquiz']['scores'][i]))
+            scores_tup = bot.memory['pquiz']['scores'].items()
+            for k, v in sorted(scores_tup, key=lambda x: x[1], reverse=True):
+                bot.say('{}: {}'.format(k, v))
             bot.memory['pquiz']['active'] = False
